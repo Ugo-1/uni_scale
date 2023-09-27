@@ -35,7 +35,7 @@ void main() {
   });
 
   test('scaleWidth should scale width correctly', () {
-    final scaledWidth = 100.scaleWidth;
+    final scaledWidth = 100.width;
     final deviceScaling =
         100 * ((isOrientationLandscape ? deviceHeight : deviceWidth)/ uiSizeTest1.width);
     expect(scaledWidth, equals(deviceScaling));
