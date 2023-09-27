@@ -34,11 +34,11 @@ The UniScaleExtension extension provides a collection of convenient methods for 
 
 | Extension Method                    | Description                                                             | Usage Example                                        |
 | ----------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------- |
-| `scaleFontSize`                     | Returns a scaled font size based on both width and height scaling factors.  | `final scaledFontSize = 20.scaleFontSize;` |
-| `scaleHeight`                       | Returns a scaled vertical spacing value based on the height scaling factor. | `final scaledSpacing = 16.scaleHeight;` |
-| `scaleWidth`                        | Returns a scaled horizontal spacing value based on the width scaling factor. | `final scaledSpacing = 8.scaleWidth;` |
-| `scaleRadius`                       | Returns a scaled radius value based on both width and height scaling factors.  | `final scaledRadius = 10.scaleRadius;` |
-| `scaleHeightWithTextScaleFactor()`  | Returns a scaled height value based on the text scale factor, with an optional custom height factor. | `final scaledHeight = 48.scaleHeightWithTextScaleFactor(heightFactor: 1.5);` |
+| `sf`                     | Returns a scaled font size based on both width and height scaling factors.  | `final scaledFontSize = 20.sf;` |
+| `height`                       | Returns a scaled vertical spacing value based on the height scaling factor. | `final scaledSpacing = 16.height;` |
+| `width`                        | Returns a scaled horizontal spacing value based on the width scaling factor. | `final scaledSpacing = 8.width;` |
+| `radius`                       | Returns a scaled radius value based on both width and height scaling factors.  | `final scaledRadius = 10.radius;` |
+| `withTextScaleFactor()`  | Returns a scaled height value based on the text scale factor, with an optional custom height factor. | `final scaledHeight = 48.withTextScaleFactor(heightFactor: 1.5);` |
 
 These extension methods simplify the process of scaling numeric values within your Flutter code, ensuring a responsive and adaptable user interface in your app.
 
@@ -56,7 +56,7 @@ UniScaleConfigure().initialize(
 );
 
 // Scale a widget's height based on the text scaling factor
-final scaledHeight = 100.scaleHeightWithTextScaleFactor(2.0);
+final scaledHeight = 100.withTextScaleFactor(2.0);
 ```
 
 ## Getting Started

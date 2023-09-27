@@ -23,6 +23,6 @@ extension UniScaleExtension on num {
   /// and the current text scale factor as configured by Uni Scale.
   ///
   /// [heightFactor]: The desired height-to-font ratio. Default is 1.
-  double scaleHeightWithTextScaleFactor({double heightFactor = 1}) =>
+  double withTextScaleFactor({double heightFactor = 1}) =>
       UniScaleConfigure().scaleHeightWithTextFactor(this, heightFactor);
 }
