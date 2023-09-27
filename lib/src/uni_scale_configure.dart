@@ -14,19 +14,21 @@ class UniScaleConfigure {
     return _instance!;
   }
 
-  /// The width of the user's device. During portrait mode, it uses the width and
-  /// during landscape mode, it uses the height.
-  late double _screenWidth;
+  /// The logical width of the user's device.
+  /// During portrait mode, it uses the logical width, and
+  /// during landscape mode, it uses the logical height.
+  late double _logicalScreenWidth;
 
-  /// The height of the user's device. During portrait mode, it uses the height and
-  /// during landscape mode, it uses the width.
-  late double _screenHeight;
+  /// The logical height of the user's device.
+  /// During portrait mode, it uses the logical height, and
+  /// during landscape mode, it uses the logical width.
+  late double _logicalScreenHeight;
 
-  /// The width of the device used in the design.
-  late double _uiDesignWidth;
+  /// The logical width of the device used in the design.
+  late double _logicalDesignWidth;
 
-  /// The height of the device used in the design.
-  late double _uiDesignHeight;
+  /// The logical height of the device used in the design.
+  late double _logicalDesignHeight;
 
   /// The height to support split-screen adaptation.
   double? _splitScreenAdaptHeight;
@@ -35,15 +37,14 @@ class UniScaleConfigure {
   /// set to `false`.
   late bool _adaptHeightToSplitScreen;
 
-  /// Initializes the ScreenScaler with the provided context and design parameters.
+  /// Initializes the UniScaleConfigure with the provided context and design parameters.
   ///
   /// - [context]: The build context.
-  /// - [designWidth]: The width of the device used in the design.
-  /// - [designHeight]: The height of the device used in the design.
+  /// - [designSize]: The logical size of the device used in the design.
   /// - [adaptHeightToSplitScreen]: Set to `true` to adapt height to split-screen, otherwise 
   ///   set to `false`.
-  /// - [splitScreenAdaptHeight]: Optional height to support split-screen adaptation. 
-  ///    Defaults to 700 if [adaptHeightToSplitScreen] is true
+  /// - [splitScreenAdaptHeight]: Optional logical height to support split-screen adaptation. 
+  ///    Defaults to 700 if [adaptHeightToSplitScreen] is true.
   void initialize(
     BuildContext context,
     Size designSize,
@@ -52,53 +53,53 @@ class UniScaleConfigure {
   ]) {
     _context = context;
     MediaQueryData mediaQueryData = MediaQuery.of(context);
-    _screenWidth = mediaQueryData.size.width;
-    _screenHeight = mediaQueryData.size.height;
+    _logicalScreenWidth = mediaQueryData.size.width;
+    _logicalScreenHeight = mediaQueryData.size.height;
     Orientation orientation = mediaQueryData.orientation;
     if (orientation == Orientation.landscape) {
-      _screenWidth = mediaQueryData.size.height;
-      _screenHeight = mediaQueryData.size.width;
+      _logicalScreenWidth = mediaQueryData.size.height;
+      _logicalScreenHeight = mediaQueryData.size.width;
     }
-    _uiDesignWidth = designSize.width;
-    _uiDesignHeight = designSize.height;
+    _logicalDesignWidth = designSize.width;
+    _logicalDesignHeight = designSize.height;
     _splitScreenAdaptHeight =
         (adaptHeightToSplitScreen) ? splitScreenAdaptHeight ?? 700 : null;
         _adaptHeightToSplitScreen = adaptHeightToSplitScreen;
   }
 
-  /// Calculates the scaling factor for the width based on the screen's width
-  /// relative to the UI design's width.
-  double get _scaleWidth => _screenWidth / _uiDesignWidth;
+  /// Calculates the scaling factor for the width based on the screen's logical width
+  /// relative to the UI design's logical width.
+  double get _widthScaleFactor => _logicalScreenWidth / _logicalDesignWidth;
 
-  /// Calculates the scaling factor for the height based on the screen's height
-  /// relative to the UI design's height, considering any split-screen adaptation height.
+  /// Calculates the scaling factor for the height based on the screen's logical height
+  /// relative to the UI design's logical height, considering any split-screen adaptation height.
   ///
   /// If [_splitScreenAdaptHeight] is not provided during initialization, it defaults to 0.
   ///
   /// If [_adaptHeightToSplitScreen] is true then it considers the split screen adaptation 
-  /// height otherwise it uses [_screenHeight].
-  double get _scaleHeight => (_adaptHeightToSplitScreen ?
-      max(_screenHeight, _splitScreenAdaptHeight ?? 0) : _screenHeight)  / _uiDesignHeight;
+  /// height otherwise it uses [_logicalScreenHeight].
+  double get _heightScaleFactor => (_adaptHeightToSplitScreen ?
+      max(_logicalScreenHeight, _splitScreenAdaptHeight ?? 0) : _logicalScreenHeight)  / _logicalDesignHeight;
 
   /// Scales the size based on the minimum of the width and height factors.
-  double setMinWidthHeight(num size) {
-    return size * min(_scaleWidth, _scaleHeight);
+  double scaleWithMinWidthHeight(num size) {
+    return size * min(_widthScaleFactor, _heightScaleFactor);
   }
 
   /// Scales the size based on the height factor only.
-  double setHeight(num size) {
-    return size * _scaleHeight;
+  double scaleWithHeight(num size) {
+    return size * _heightScaleFactor;
   }
 
   /// Scales the size based on the width factor only.
-  double setWidth(num size) {
-    return size * _scaleWidth;
+  double scaleWithWidth(num size) {
+    return size * _widthScaleFactor;
   }
 
   /// Scales the height of a widget according to the text scale factor.
   ///
   /// - [heightFactor]: Adjust to your desired height-to-font ratio.
-  /// - [childHeight]: The height from the design.
+  /// - [childHeight]: The logical height from the design.
   double scaleHeightWithTextFactor(num childHeight, num heightFactor,) {
     final textScaleFactor =
         MediaQuery.textScaleFactorOf(_context); // Use stored context
